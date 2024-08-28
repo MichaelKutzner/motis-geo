@@ -59,3 +59,22 @@ TEST_CASE("polylineDistanceToPolyline_pointNotOnLine_getClosestPoint") {
   CHECK(abs(projection.distance_to_polyline_ - distance(test_point, best)) < kEpsilon);
   CHECK(distance(projection.best_, best) < kEpsilon);
 }
+
+TEST_CASE("polylineSplitPolyline_multipleCoordinates_getSegments") {
+  auto const line = polyline{{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}, {0.4f, 1.4f}, {1.4f, 1.4f}, {1.4f, 0.4f}, {0.4f, 0.4f}};
+  auto const test_points = polyline{{0.99f, 0.95f}, {0.9f, 1.01f}, {0.6f, 0.9f}, {0.41f, 1.39f}, {1.0f, 1.5f}, {1.39f, 1.4f}, {1.41f, 0.6f}};
+
+  auto const segments = split_polyline(line, test_points);
+
+  auto const expected_split_points = polyline{{1.0f, 0.95f}, {0.9f, 1.0f}, {0.6f, 1.0f}, {0.41f, 1.40f}, {1.0f, 1.4f}, {1.39f, 1.4f}, {1.4f, 0.6f}};
+  auto const expected_splits = std::vector<std::size_t>{1u, 2u, 2u, 4u, 4u, 4u, 5u};
+  auto splits = std::vector<size_t>{};
+  auto index = std::size_t{0u};
+  for (auto const& pair : segments) {
+    CHECK(distance(expected_split_points.at(index), pair.first) < 2 * kEpsilon);
+    splits.push_back(pair.second);
+    ++index;
+  }
+  CHECK(segments.size() == test_points.size());
+  CHECK(expected_splits == splits);
+}

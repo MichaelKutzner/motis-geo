@@ -2,6 +2,7 @@
 
 #include "boost/geometry.hpp"
 
+#include "geo/latlng.h"
 #include "utl/pairwise.h"
 
 #include "geo/constants.h"
@@ -47,6 +48,35 @@ polyline_candidate distance_to_polyline(latlng const& x, polyline const& c) {
     ++segment_idx;
   }
   return {.distance_to_polyline_ = min, .best_ = best, .segment_idx_ = best_segment_idx};
+}
+
+std::vector<std::pair<latlng, std::size_t>> split_polyline(polyline const& line, polyline const& split_points) {
+  auto segments = std::vector<std::pair<latlng, std::size_t>>{};
+  segments.reserve(split_points.size());
+
+  auto const generator = utl::pairwise(line);
+  auto start = generator.begin();
+  auto offset = std::size_t{0u};
+
+  for (auto const& point : split_points) {
+    auto min = std::numeric_limits<double>::max();
+    auto best = latlng{};
+    auto segment_idx = offset;
+    for (auto it = start; it != generator.end(); ++it) {
+      auto const& [a, b] = *it;
+      auto const candidate = closest_on_segment(point, a, b);
+      auto const dist = distance(point, candidate);
+      if (dist < min) {
+        min = dist;
+        best = candidate;
+        start = it;
+        offset = segment_idx;
+      }
+      ++segment_idx;
+    }
+    segments.emplace_back(std::make_pair(best, offset));
+  }
+  return segments;
 }
 
 }  // namespace geo

@@ -75,4 +75,6 @@ struct polyline_candidate {
 
 polyline_candidate distance_to_polyline(latlng const&, polyline const&);
 
+std::vector<std::pair<latlng, std::size_t>> split_polyline(polyline const& line, polyline const& split_points);
+
 }  // namespace geo

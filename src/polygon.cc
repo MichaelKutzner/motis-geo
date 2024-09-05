@@ -1,14 +1,13 @@
 #include "geo/polygon.h"
 
 #include <cmath>
+#include <boost/geometry/algorithms/detail/within/interface.hpp>
 #include <fstream>
+#include <ios>
 #include <istream>
 #include <string>
 
-#include "boost/geometry.hpp"
-
-#include "geo/detail/register_latlng.h"
-#include "geo/detail/register_polygon.h"
+#include "geo/latlng.h"
 
 namespace geo {
 

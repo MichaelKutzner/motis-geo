@@ -1,9 +1,10 @@
 #include "doctest/doctest.h"
+#include "geo/polyline.h"
 
 #include "geo/box.h"
 
 TEST_CASE("basic_box") {
-  geo::polyline line{{49.980557, 9.143697}, {50.002645, 9.072252}};
+  geo::polyline const line{{49.980557, 9.143697}, {50.002645, 9.072252}};
 
   auto const sut = geo::box{line};
 

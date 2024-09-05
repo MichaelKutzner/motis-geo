@@ -2,7 +2,9 @@
 
 #include <chrono>
 #include <iostream>
+#include <limits>
 #include <random>
+#include <utility>
 #include <vector>
 
 #include "geo/latlng.h"

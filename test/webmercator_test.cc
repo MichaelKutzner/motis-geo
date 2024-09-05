@@ -1,5 +1,10 @@
 #include "doctest/doctest.h"
+#include "geo/latlng.h"
 
+#include <cmath>
+#include <cstdint>
+#include <iostream>
+#include <limits>
 #include "geo/webmercator.h"
 
 TEST_CASE("latlng to pixel project pixel") {

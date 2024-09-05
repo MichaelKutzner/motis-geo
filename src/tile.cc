@@ -1,4 +1,6 @@
 #include "geo/tile.h"
+#include <cstdint>
+#include <algorithm>
 
 namespace geo {
 
@@ -44,8 +46,9 @@ tile_range make_tile_range(uint32_t z) {
 tile_range make_tile_range(uint32_t const x_1, uint32_t const y_1,
                            uint32_t const x_2, uint32_t const y_2,
                            uint32_t const z) {
-  tile_iterator_bounds bounds{std::min(x_1, x_2), std::min(y_1, y_2),
-                              std::max(x_1, x_2) + 1, std::max(y_1, y_2) + 1};
+  tile_iterator_bounds const bounds{std::min(x_1, x_2), std::min(y_1, y_2),
+                                    std::max(x_1, x_2) + 1,
+                                    std::max(y_1, y_2) + 1};
   return tile_range{
       tile_iterator{std::min(x_1, x_2), std::min(y_1, y_2), z, bounds},
       ++tile_iterator{std::max(x_1, x_2), std::max(y_1, y_2), z, bounds}};

@@ -1,11 +1,14 @@
 #include "geo/latlng.h"
 
+#include <cassert>
 #include <cmath>
+#include <cstdint>
 
-#include "boost/geometry.hpp"
+#include <boost/geometry/algorithms/detail/distance/interface.hpp>
+#include <ostream>
 
 #include "geo/constants.h"
-#include "geo/detail/register_latlng.h"
+#include "geo/rad_deg.h"
 #include "geo/tile.h"
 #include "geo/webmercator.h"
 
@@ -21,8 +24,8 @@ double distance(latlng const& a, latlng const& b) {
 
 // following non-public boost implementation
 double bearing(latlng const& p1, latlng const& p2) {
-  double dlng = to_rad(p1.lng_) - to_rad(p2.lng_);  // CCW from NORTH!
-  double cos_p2lat = std::cos(to_rad(p2.lat_));
+  double const dlng = to_rad(p1.lng_) - to_rad(p2.lng_);  // CCW from NORTH!
+  double const cos_p2lat = std::cos(to_rad(p2.lat_));
 
   auto bearing =
       std::atan2(std::sin(dlng) * cos_p2lat,
@@ -34,7 +37,7 @@ double bearing(latlng const& p1, latlng const& p2) {
 
 // https://stackoverflow.com/a/4656937/10794188
 latlng midpoint(latlng const& a, latlng const& b) {
-  double d_lng = to_rad(b.lng_ - a.lng_);
+  double const d_lng = to_rad(b.lng_ - a.lng_);
 
   auto const a_lat = to_rad(a.lat_);
   auto const b_lat = to_rad(b.lat_);

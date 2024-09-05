@@ -1,12 +1,18 @@
 #include "geo/point_rtree.h"
+#include <cstddef>
 
-#include "boost/geometry/geometries/box.hpp"
-#include "boost/geometry/geometries/point.hpp"
 #include "boost/geometry/index/rtree.hpp"
 #include "boost/iterator/function_output_iterator.hpp"
+#include <algorithm>
+#include <boost/geometry/index/parameters.hpp>
+#include <boost/geometry/index/predicates.hpp>
+#include <iterator>
+#include <memory>
+#include <utility>
+#include <vector>
 
-#include "geo/detail/register_box.h"
-#include "geo/detail/register_latlng.h"
+#include "geo/box.h"
+#include "geo/latlng.h"
 
 namespace bgi = boost::geometry::index;
 
@@ -80,7 +86,7 @@ struct point_rtree::impl {
   std::size_t size() const { return rtree_.size(); }
 
   rtree_t rtree_;
-};
+} __attribute__((aligned(32)));
 
 point_rtree::point_rtree() : impl_(std::make_unique<point_rtree::impl>()) {}
 point_rtree::~point_rtree() = default;

@@ -1,5 +1,8 @@
 #include "doctest/doctest.h"
 
+#include <cstdint>
+#include <cstring>
+#include <vector>
 #include "geo/polyline.h"
 #include "geo/simplify_mask.h"
 #include "geo/webmercator.h"
@@ -12,7 +15,7 @@ TEST_CASE("make_simplify_mask") {
   };
 
   SUBCASE("all required") {
-    geo::polyline in{px2ll(0, 0, 0), px2ll(50, 0, 0), px2ll(100, 0, 0)};
+    geo::polyline const in{px2ll(0, 0, 0), px2ll(50, 0, 0), px2ll(100, 0, 0)};
 
     auto const out = make_simplify_mask(in);
     REQUIRE(out.size() == 21);
@@ -23,7 +26,7 @@ TEST_CASE("make_simplify_mask") {
     CHECK(out[0][2] == true);
   }
   SUBCASE("slight deviation") {
-    geo::polyline in{px2ll(0, 0, 0), px2ll(50, 1, 0), px2ll(100, 0, 0)};
+    geo::polyline const in{px2ll(0, 0, 0), px2ll(50, 1, 0), px2ll(100, 0, 0)};
 
     auto const out = make_simplify_mask(in);
     REQUIRE(out.size() == 21);
@@ -44,8 +47,8 @@ TEST_CASE("make_simplify_mask") {
   }
 
   SUBCASE("recursion") {
-    geo::polyline in{px2ll(0, 0, 0), px2ll(50, 1, 0), px2ll(100, 0, 0),
-                     px2ll(100, 100, 0)};
+    geo::polyline const in{px2ll(0, 0, 0), px2ll(50, 1, 0), px2ll(100, 0, 0),
+                           px2ll(100, 100, 0)};
 
     auto const out = make_simplify_mask(in, 2);
     REQUIRE(out.size() == 21);
@@ -67,7 +70,8 @@ TEST_CASE("make_simplify_mask") {
   }
 
   SUBCASE("mid level") {
-    geo::polyline in{px2ll(20, 0, 10), px2ll(21, 25, 10), px2ll(20, 50, 10)};
+    geo::polyline const in{px2ll(20, 0, 10), px2ll(21, 25, 10),
+                           px2ll(20, 50, 10)};
 
     auto const out = make_simplify_mask(in);
     REQUIRE(out.size() == 21);
@@ -147,7 +151,7 @@ TEST_CASE("simplify_mask_serialize") {
   };
 
   SUBCASE("simple") {
-    std::vector<std::vector<bool>> sut{{true, true}};
+    std::vector<std::vector<bool>> const sut{{true, true}};
 
     auto str = geo::serialize_simplify_mask(sut);
 
@@ -159,7 +163,7 @@ TEST_CASE("simplify_mask_serialize") {
   }
 
   SUBCASE("skip") {
-    std::vector<std::vector<bool>> sut{{true, true}, {true, true}};
+    std::vector<std::vector<bool>> const sut{{true, true}, {true, true}};
 
     auto str = geo::serialize_simplify_mask(sut);
 
@@ -171,7 +175,7 @@ TEST_CASE("simplify_mask_serialize") {
   }
 
   SUBCASE("multibyte") {
-    std::vector<std::vector<bool>> sut{
+    std::vector<std::vector<bool>> const sut{
         {true, true, true, true, true, true, true, true, false, true}};
 
     auto str = geo::serialize_simplify_mask(sut);
@@ -189,7 +193,7 @@ TEST_CASE("simplify_mask_serialize") {
 
 TEST_CASE("simplify_mask_serial_apply") {
   SUBCASE("simple") {
-    std::vector<std::vector<bool>> mask{{true, false, true}};
+    std::vector<std::vector<bool>> const mask{{true, false, true}};
     auto mask_str = geo::serialize_simplify_mask(mask);
 
     std::vector<int> sut{1, 2, 3};
@@ -199,7 +203,7 @@ TEST_CASE("simplify_mask_serial_apply") {
   }
 
   SUBCASE("complex") {
-    std::vector<std::vector<bool>> mask{
+    std::vector<std::vector<bool>> const mask{
         {true, false, false, false, false, false, true, false, false, true},
         {true, false, true, true, false, false, true, false, false, true},
         {true, false, true, true, false, false, true, false, false, true}};

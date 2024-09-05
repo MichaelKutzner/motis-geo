@@ -1,6 +1,7 @@
 #include "doctest/doctest.h"
 
 #include <array>
+#include <tuple>
 #include <vector>
 
 #include "geo/latlng.h"

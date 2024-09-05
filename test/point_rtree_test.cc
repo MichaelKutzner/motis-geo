@@ -2,6 +2,7 @@
 
 #include "geo/latlng.h"
 
+#include <vector>
 #include "geo/point_rtree.h"
 
 TEST_CASE("point rtree") {

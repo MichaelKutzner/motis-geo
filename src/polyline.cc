@@ -1,11 +1,11 @@
 #include "geo/polyline.h"
+#include <cstddef>
+#include <cstdlib>
 
-#include "boost/geometry.hpp"
+#include <boost/geometry/algorithms/length.hpp>
+#include <boost/geometry/algorithms/simplify.hpp>
 
 #include "geo/constants.h"
-
-#include "geo/detail/register_latlng.h"
-#include "geo/detail/register_polyline.h"
 
 namespace geo {
 

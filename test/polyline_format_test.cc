@@ -1,4 +1,5 @@
 #include "doctest/doctest.h"
+#include "geo/polyline.h"
 
 #include "geo/polyline_format.h"
 

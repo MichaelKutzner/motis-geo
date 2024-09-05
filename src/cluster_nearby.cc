@@ -1,14 +1,15 @@
 #include "geo/cluster_nearby.h"
+#include <math.h>
 
 #include <cmath>
 #include <cstddef>
 #include <algorithm>
-#include <functional>
 #include <iterator>
-#include <memory>
+#include <limits>
 #include <stdexcept>
-#include <type_traits>
 #include <utility>
+#include <vector>
+#include "geo/latlng.h"
 
 namespace geo {
 
@@ -23,11 +24,11 @@ struct latlng_f {
   latlng_f(float lat, float lng) : lat_(lat), lng_(lng) {}
 
   float lat_, lng_;
-};
+} __attribute__((aligned(8)));
 
 struct bounding_box_f {
   float lat_max_, lat_min_, lng_max_, lng_min_;
-};
+} __attribute__((aligned(16)));
 
 inline float gc_distance_f(latlng_f const& a, latlng_f const& b) {
   auto const to_rad = [](float const deg) { return deg * kPi / 180.0F; };
@@ -42,8 +43,8 @@ inline float gc_distance_f(latlng_f const& a, latlng_f const& b) {
 inline bounding_box_f compute_bounding_box(latlng_f const& center,
                                            float const dist) {
   // http://gis.stackexchange.com/a/2980
-  float offset_lat = (dist / kEarthRadius_f) * 180.0F / kPi;
-  float offset_lng =
+  float const offset_lat = (dist / kEarthRadius_f) * 180.0F / kPi;
+  float const offset_lng =
       (dist / (kEarthRadius_f * std::cos(center.lat_ * kPi / 180.0F))) *
       180.0F / kPi;
 
@@ -135,7 +136,7 @@ inline std::vector<cluster_id_t> make_complete_linkage_clusters(
         if (ci == cj) {
           continue;
         }
-        float distance = gc_distance_f(coords[i], coords[j]);
+        float const distance = gc_distance_f(coords[i], coords[j]);
         auto& max_dist = distances[ci * clusters.size() + cj];
         if (distance > max_dist) {
           max_dist = distance;

@@ -14,7 +14,7 @@ std::vector<geo::tile> list_tiles(geo::tile_range const& range) {
 
 TEST_CASE("tile::direct_children()") {
   SUBCASE("root") {
-    geo::tile root{0, 0, 0};
+    geo::tile const root{0, 0, 0};
     auto const actual = list_tiles(root.direct_children());
 
     std::vector<geo::tile> expected{{0, 0, 1}, {1, 0, 1}, {0, 1, 1}, {1, 1, 1}};
@@ -23,7 +23,7 @@ TEST_CASE("tile::direct_children()") {
   }
 
   SUBCASE("darmstadt") {
-    geo::tile parent{8585, 5565, 14};
+    geo::tile const parent{8585, 5565, 14};
     auto const actual = list_tiles(parent.direct_children());
 
     std::vector<geo::tile> expected{{17170, 11130, 15},
@@ -50,7 +50,7 @@ TEST_CASE("tile::FOO_on_z()") {
   }
 
   SUBCASE("1 level down") {
-    geo::tile uut{0, 0, 0};
+    geo::tile const uut{0, 0, 0};
     auto const actual = list_tiles(uut.range_on_z(1));
 
     std::vector<geo::tile> expected{{0, 0, 1}, {1, 0, 1}, {0, 1, 1}, {1, 1, 1}};
@@ -63,7 +63,7 @@ TEST_CASE("tile::FOO_on_z()") {
   }
 
   SUBCASE("2 levels down") {
-    geo::tile uut{56, 84, 7};
+    geo::tile const uut{56, 84, 7};
     auto const actual = list_tiles(uut.range_on_z(9));
 
     std::vector<geo::tile> expected{
@@ -80,7 +80,7 @@ TEST_CASE("tile::FOO_on_z()") {
   }
 
   SUBCASE("1 level up") {
-    geo::tile uut{17170, 11131, 15};
+    geo::tile const uut{17170, 11131, 15};
     auto const actual = list_tiles(uut.range_on_z(14));
 
     std::vector<geo::tile> expected{{8585, 5565, 14}};
@@ -92,7 +92,7 @@ TEST_CASE("tile::FOO_on_z()") {
   }
 
   SUBCASE("3 levels up") {
-    geo::tile uut{15670, 131, 15};
+    geo::tile const uut{15670, 131, 15};
     auto const actual = list_tiles(uut.range_on_z(12));
 
     std::vector<geo::tile> expected{{1958, 16, 12}};
@@ -104,7 +104,7 @@ TEST_CASE("tile::FOO_on_z()") {
   }
 
   SUBCASE("all levels up") {
-    geo::tile uut{12314, 23455, 15};
+    geo::tile const uut{12314, 23455, 15};
     auto const actual = list_tiles(uut.range_on_z(0));
 
     std::vector<geo::tile> expected{{0, 0, 0}};
@@ -168,7 +168,7 @@ TEST_CASE("tile_range") {
   }
 
   SUBCASE("tile_range_on_z") {
-    geo::tile parent{8585, 5565, 14};
+    geo::tile const parent{8585, 5565, 14};
     for (auto i = 0; i < 21; ++i) {
       auto const e = list_tiles(parent.range_on_z(i));
 

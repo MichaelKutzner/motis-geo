@@ -28,7 +28,7 @@ struct box {
     extend(dist_in_m);
   }
 
-  void extend(polyline const& line) {
+  void extend(Polyline auto const& line) {
     for (auto const& pos : line) {
       extend(pos);
     }

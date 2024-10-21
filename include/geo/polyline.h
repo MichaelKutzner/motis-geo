@@ -2,6 +2,8 @@
 
 #include <cassert>
 #include <cinttypes>
+#include <ranges>
+#include <type_traits>
 #include <vector>
 
 #include "utl/pairwise.h"
@@ -11,6 +13,10 @@
 namespace geo {
 
 using polyline = std::vector<latlng>;
+
+template <class T>
+concept Polyline = std::ranges::range<T> &&
+                   std::is_same_v<std::ranges::range_value_t<T>, latlng>;
 
 double length(polyline const&);
 
